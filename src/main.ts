@@ -1,6 +1,6 @@
 import { Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf } from "obsidian";
 import { ProvenanceModal } from "./modal";
-import { auditRecord, PROVENANCE_KEY, recordFromFrontmatter } from "./provenance";
+import { auditRecord, recordFromFrontmatter, writeRecordToFrontmatter } from "./provenance";
 import type { AuditResult, ProvenanceRecord, ProvenanceSettings } from "./types";
 import { PROVENANCE_VIEW, ProvenanceView } from "./view";
 
@@ -37,7 +37,7 @@ export default class NarrativeProvenancePlugin extends Plugin {
     const file = this.app.workspace.getActiveFile();
     if (!file || file.extension !== "md") { new Notice("Open a Markdown note first."); return; }
     new ProvenanceModal(this.app, this.readRecord(file), async (record) => {
-      await this.app.fileManager.processFrontMatter(file, (frontmatter) => { frontmatter[PROVENANCE_KEY] = record; });
+      await this.app.fileManager.processFrontMatter(file, (frontmatter) => writeRecordToFrontmatter(frontmatter, record));
       new Notice("Narrative provenance saved.");
       await this.refreshViews();
     }).open();
