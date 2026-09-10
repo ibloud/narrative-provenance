@@ -1,6 +1,17 @@
 import type { AuditResult, ProvenanceRecord } from "./types";
 
 export const PROVENANCE_KEY = "provenance";
+export const PROVENANCE_FIELDS = {
+  status: "provenance-status",
+  authors: "provenance-authors",
+  created: "provenance-created",
+  sources: "provenance-sources",
+  rights: "provenance-rights",
+  consent: "provenance-consent",
+  affiliation: "provenance-affiliation",
+  reviewed: "provenance-reviewed",
+  notes: "provenance-notes"
+} as const;
 
 export const emptyRecord = (defaultAuthor = ""): ProvenanceRecord => ({
   status: "unreviewed",
@@ -21,6 +32,20 @@ const strings = (value: unknown): string[] => {
 };
 
 export function recordFromFrontmatter(frontmatter: Record<string, unknown> | null | undefined, defaultAuthor = ""): ProvenanceRecord {
+  if (frontmatter && Object.values(PROVENANCE_FIELDS).some((key) => key in frontmatter)) {
+    const base = emptyRecord(defaultAuthor);
+    return {
+      status: typeof frontmatter[PROVENANCE_FIELDS.status] === "string" ? frontmatter[PROVENANCE_FIELDS.status] as ProvenanceRecord["status"] : base.status,
+      authors: strings(frontmatter[PROVENANCE_FIELDS.authors]).length ? strings(frontmatter[PROVENANCE_FIELDS.authors]) : base.authors,
+      created: String(frontmatter[PROVENANCE_FIELDS.created] ?? ""),
+      sources: strings(frontmatter[PROVENANCE_FIELDS.sources]),
+      rights: typeof frontmatter[PROVENANCE_FIELDS.rights] === "string" ? frontmatter[PROVENANCE_FIELDS.rights] as ProvenanceRecord["rights"] : base.rights,
+      consent: typeof frontmatter[PROVENANCE_FIELDS.consent] === "string" ? frontmatter[PROVENANCE_FIELDS.consent] as ProvenanceRecord["consent"] : base.consent,
+      affiliation: typeof frontmatter[PROVENANCE_FIELDS.affiliation] === "string" ? frontmatter[PROVENANCE_FIELDS.affiliation] as ProvenanceRecord["affiliation"] : base.affiliation,
+      reviewed: String(frontmatter[PROVENANCE_FIELDS.reviewed] ?? ""),
+      notes: String(frontmatter[PROVENANCE_FIELDS.notes] ?? "")
+    };
+  }
   const raw = frontmatter?.[PROVENANCE_KEY];
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return emptyRecord(defaultAuthor);
   const value = raw as Record<string, unknown>;
@@ -36,6 +61,19 @@ export function recordFromFrontmatter(frontmatter: Record<string, unknown> | nul
     reviewed: typeof value.reviewed === "string" ? value.reviewed : "",
     notes: typeof value.notes === "string" ? value.notes : ""
   };
+}
+
+export function writeRecordToFrontmatter(frontmatter: Record<string, unknown>, record: ProvenanceRecord): void {
+  frontmatter[PROVENANCE_FIELDS.status] = record.status;
+  frontmatter[PROVENANCE_FIELDS.authors] = record.authors;
+  frontmatter[PROVENANCE_FIELDS.created] = record.created;
+  frontmatter[PROVENANCE_FIELDS.sources] = record.sources;
+  frontmatter[PROVENANCE_FIELDS.rights] = record.rights;
+  frontmatter[PROVENANCE_FIELDS.consent] = record.consent;
+  frontmatter[PROVENANCE_FIELDS.affiliation] = record.affiliation;
+  frontmatter[PROVENANCE_FIELDS.reviewed] = record.reviewed;
+  frontmatter[PROVENANCE_FIELDS.notes] = record.notes;
+  delete frontmatter[PROVENANCE_KEY];
 }
 
 export function auditRecord(record: ProvenanceRecord): AuditResult {
