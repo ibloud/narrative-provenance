@@ -24,20 +24,21 @@ All information remains in ordinary YAML frontmatter inside the user's vault. Th
 
 ```yaml
 ---
-provenance:
-  status: interpretation
-  authors:
-    - Dominique Devereaux
-  created: 2026-09-10
-  sources:
-    - https://example.org/primary-source
-  rights: original
-  consent: not-applicable
-  affiliation: independent
-  reviewed: 2026-09-10
-  notes: Distinguishes story analysis from verified provenance.
+provenance-status: interpretation
+provenance-authors:
+  - Dominique Devereaux
+provenance-created: 2026-09-10
+provenance-sources:
+  - https://example.org/primary-source
+provenance-rights: original
+provenance-consent: not-applicable
+provenance-affiliation: independent
+provenance-reviewed: 2026-09-10
+provenance-notes: Distinguishes story analysis from verified provenance.
 ---
 ```
+
+Versions before `0.1.1` stored the same values inside one nested `provenance` object. Opening and saving that record with the current editor automatically converts it to readable individual properties.
 
 ### Controlled values
 
