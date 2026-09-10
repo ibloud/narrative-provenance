@@ -1,0 +1,10 @@
+{
+  "id": "narrative-provenance",
+  "name": "Narrative Provenance",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Record and review authorship, sources, rights, consent, and narrative status in your notes.",
+  "author": "Dominique Devereaux",
+  "authorUrl": "https://ibloud.github.io",
+  "isDesktopOnly": false
+}
