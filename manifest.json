@@ -1,7 +1,7 @@
 {
   "id": "narrative-provenance",
   "name": "Narrative Provenance",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.5.0",
   "description": "Record and review authorship, sources, rights, consent, and narrative status in your notes.",
   "author": "Dominique Devereaux",
