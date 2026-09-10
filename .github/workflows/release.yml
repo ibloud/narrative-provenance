@@ -29,4 +29,9 @@ jobs:
       - name: Create beta release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create 0.1.2 main.js manifest.json styles.css --target "$GITHUB_SHA" --title "0.1.2" --notes "Community-review corrections: safe view lifecycle, current API compatibility, awaited callbacks, safer frontmatter handling, and searchable settings." --prerelease
+        run: >-
+          gh release create 0.1.2 main.js manifest.json styles.css
+          --target "$GITHUB_SHA"
+          --title "0.1.2"
+          --notes "Community-review corrections: safe view lifecycle, current API compatibility, awaited callbacks, safer frontmatter handling, and searchable settings."
+          --prerelease
