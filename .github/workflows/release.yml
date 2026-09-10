@@ -1,4 +1,4 @@
-name: Publish beta 0.1.0
+name: Publish beta 0.1.1
 
 on:
   workflow_dispatch:
@@ -24,8 +24,8 @@ jobs:
       - run: npm test
       - run: npm run build
       - name: Verify manifest version
-        run: node -e "if(require('./manifest.json').version!=='0.1.0')process.exit(1)"
+        run: node -e "if(require('./manifest.json').version!=='0.1.1')process.exit(1)"
       - name: Create beta release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create 0.1.0 main.js manifest.json styles.css --target "$GITHUB_SHA" --title "0.1.0" --notes "First iPad testing build. Install through BRAT for evaluation in a disposable vault." --prerelease
+        run: gh release create 0.1.1 main.js manifest.json styles.css --target "$GITHUB_SHA" --title "0.1.1" --notes "iPad testing build with readable individual properties and automatic migration from 0.1.0." --prerelease
