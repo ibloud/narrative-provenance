@@ -21,7 +21,7 @@ export class ProvenanceView extends ItemView {
       container.createEl("p", { text: "Open a Markdown note to review its provenance.", cls: "setting-item-description" });
       return;
     }
-    container.createEl("div", { text: file.basename, cls: "narrative-provenance-file" });
+    container.createDiv({ text: file.basename, cls: "narrative-provenance-file" });
     const record = this.plugin.readRecord(file);
     const audit = this.plugin.audit(record);
     const meter = container.createDiv({ cls: "narrative-provenance-meter" });

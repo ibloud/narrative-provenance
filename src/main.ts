@@ -1,4 +1,4 @@
-import { Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf } from "obsidian";
+import { Notice, Plugin, PluginSettingTab, TFile, WorkspaceLeaf, type SettingDefinitionItem } from "obsidian";
 import { ProvenanceModal } from "./modal";
 import { auditRecord, recordFromFrontmatter, writeRecordToFrontmatter } from "./provenance";
 import type { AuditResult, ProvenanceRecord, ProvenanceSettings } from "./types";
@@ -12,20 +12,18 @@ export default class NarrativeProvenancePlugin extends Plugin {
   async onload(): Promise<void> {
     await this.loadSettings();
     this.registerView(PROVENANCE_VIEW, (leaf) => new ProvenanceView(leaf, this));
-    this.addRibbonIcon("file-check-2", "Review narrative provenance", () => this.activateView());
+    this.addRibbonIcon("file-check-2", "Review narrative provenance", () => { void this.activateView(); });
     this.addCommand({ id: "edit-current-note-provenance", name: "Edit current note provenance", callback: () => this.openEditor() });
     this.addCommand({ id: "audit-current-note-provenance", name: "Audit current note provenance", callback: () => this.showAudit() });
-    this.addCommand({ id: "open-provenance-sidebar", name: "Open provenance sidebar", callback: () => this.activateView() });
+    this.addCommand({ id: "open-provenance-sidebar", name: "Open provenance sidebar", callback: () => { void this.activateView(); } });
     this.addSettingTab(new ProvenanceSettingTab(this.app, this));
     this.app.workspace.onLayoutReady(() => {
       this.registerEvent(this.app.workspace.on("active-leaf-change", () => this.refreshViews()));
       this.registerEvent(this.app.metadataCache.on("changed", (file) => {
-        if (file === this.app.workspace.getActiveFile()) this.refreshViews();
+        if (file === this.app.workspace.getActiveFile()) void this.refreshViews();
       }));
     });
   }
-
-  onunload(): void { this.app.workspace.detachLeavesOfType(PROVENANCE_VIEW); }
 
   readRecord(file: TFile): ProvenanceRecord {
     return recordFromFrontmatter(this.app.metadataCache.getFileCache(file)?.frontmatter, this.settings.defaultAuthor);
@@ -68,15 +66,43 @@ export default class NarrativeProvenancePlugin extends Plugin {
     }
   }
 
-  async loadSettings(): Promise<void> { this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<ProvenanceSettings> | null); }
+  async loadSettings(): Promise<void> {
+    const data: unknown = await this.loadData();
+    this.settings = { ...DEFAULT_SETTINGS, ...(isSettings(data) ? data : {}) };
+  }
   async saveSettings(): Promise<void> { await this.saveData(this.settings); }
+}
+
+function isSettings(value: unknown): value is Partial<ProvenanceSettings> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 class ProvenanceSettingTab extends PluginSettingTab {
   constructor(app: NarrativeProvenancePlugin["app"], private readonly plugin: NarrativeProvenancePlugin) { super(app, plugin); }
-  display(): void {
-    this.containerEl.empty();
-    new Setting(this.containerEl).setName("Default author").setDesc("Pre-fill new provenance records with this creator name.").addText((text) => text.setValue(this.plugin.settings.defaultAuthor).onChange(async (value) => { this.plugin.settings.defaultAuthor = value.trim(); await this.plugin.saveSettings(); }));
-    new Setting(this.containerEl).setName("Overwrite warning").setDesc("Reserved for the guided import workflow in a future release.").addToggle((toggle) => toggle.setValue(this.plugin.settings.warnBeforeOverwrite).onChange(async (value) => { this.plugin.settings.warnBeforeOverwrite = value; await this.plugin.saveSettings(); }));
+
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    return [
+      {
+        name: "Default author",
+        desc: "Pre-fill new provenance records with this creator name.",
+        control: { type: "text", key: "defaultAuthor", defaultValue: "" },
+      },
+      {
+        name: "Overwrite warning",
+        desc: "Reserved for the guided import workflow in a future release.",
+        control: { type: "toggle", key: "warnBeforeOverwrite", defaultValue: true },
+      },
+    ];
+  }
+
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    if (key === "defaultAuthor" && typeof value === "string") {
+      this.plugin.settings.defaultAuthor = value.trim();
+    } else if (key === "warnBeforeOverwrite" && typeof value === "boolean") {
+      this.plugin.settings.warnBeforeOverwrite = value;
+    } else {
+      return;
+    }
+    await this.plugin.saveSettings();
   }
 }

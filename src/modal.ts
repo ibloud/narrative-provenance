@@ -30,14 +30,18 @@ export class ProvenanceModal extends Modal {
 
     new Setting(contentEl)
       .addButton((button) => button.setButtonText("Cancel").onClick(() => this.close()))
-      .addButton((button) => button.setButtonText("Save provenance").setCta().onClick(async () => {
-        this.record.reviewed = new Date().toISOString().slice(0, 10);
-        await this.onSave(this.record);
-        this.close();
+      .addButton((button) => button.setButtonText("Save provenance").setCta().onClick(() => {
+        void this.saveAndClose();
       }));
   }
 
   onClose(): void { this.contentEl.empty(); }
+
+  private async saveAndClose(): Promise<void> {
+    this.record.reviewed = new Date().toISOString().slice(0, 10);
+    await this.onSave(this.record);
+    this.close();
+  }
 
   private addText(name: string, description: string, value: string, onChange: (value: string) => void, placeholder = ""): void {
     new Setting(this.contentEl).setName(name).setDesc(description).addText((text) => text.setValue(value).setPlaceholder(placeholder).onChange(onChange));
@@ -49,7 +53,7 @@ export class ProvenanceModal extends Modal {
 
   private addDropdown(name: string, description: string, options: readonly string[], value: string, onChange: (value: string) => void): void {
     new Setting(this.contentEl).setName(name).setDesc(description).addDropdown((dropdown) => {
-      options.forEach((option) => dropdown.addOption(option, label(option)));
+      options.forEach((option) => { dropdown.addOption(option, label(option)); });
       dropdown.setValue(value).onChange(onChange);
     });
   }
