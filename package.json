@@ -1,6 +1,6 @@
 {
   "name": "narrative-provenance",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Privacy-first provenance records for Obsidian notes",
   "main": "main.js",
   "scripts": {
