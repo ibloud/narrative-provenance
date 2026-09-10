@@ -1,0 +1,10 @@
+.narrative-provenance-modal .setting-item { align-items: flex-start; }
+.narrative-provenance-modal .setting-item-control { min-width: min(22rem, 55vw); }
+.narrative-provenance-modal textarea { min-height: 5rem; width: 100%; }
+.narrative-provenance-view { padding: var(--size-4-4); }
+.narrative-provenance-file { font-weight: var(--font-semibold); overflow-wrap: anywhere; }
+.narrative-provenance-meter { background: var(--background-modifier-border); border-radius: var(--radius-s); height: 0.5rem; margin-top: var(--size-4-4); overflow: hidden; }
+.narrative-provenance-meter-fill { background: var(--interactive-accent); height: 100%; width: var(--provenance-score); }
+.narrative-provenance-success { color: var(--text-success); }
+.narrative-provenance-caution { background: var(--background-modifier-error); border-radius: var(--radius-s); color: var(--text-error); margin: var(--size-4-3) 0; padding: var(--size-4-3); }
+.narrative-provenance-view button { margin-top: var(--size-4-3); width: 100%; }
