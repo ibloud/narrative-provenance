@@ -1,0 +1,110 @@
+:root {
+  color-scheme: dark;
+  --bg: #0c0a12;
+  --surface: #15111f;
+  --surface-2: #1c1629;
+  --text: #f7f3fb;
+  --muted: #b9afc7;
+  --purple: #a97af5;
+  --purple-bright: #c4a0ff;
+  --mint: #78efc0;
+  --line: rgba(205, 180, 255, 0.18);
+  --max: 1180px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 78% 5%, rgba(111, 63, 184, 0.19), transparent 29rem),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+a { color: inherit; }
+.skip-link { position: absolute; left: -9999px; top: 0; }
+.skip-link:focus { left: 1rem; top: 1rem; z-index: 10; padding: .7rem 1rem; background: var(--text); color: var(--bg); }
+
+.site-header {
+  width: min(calc(100% - 2rem), var(--max));
+  margin: 0 auto;
+  min-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; font-weight: 700; letter-spacing: -.02em; }
+.brand-mark { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid var(--purple); background: rgba(169, 122, 245, .12); color: var(--purple-bright); font-size: .74rem; border-radius: .45rem; }
+nav { display: flex; gap: 1.4rem; }
+nav a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+nav a:hover, nav a:focus-visible { color: var(--text); }
+
+main, footer { width: min(calc(100% - 2rem), var(--max)); margin-inline: auto; }
+.hero { min-height: 43rem; display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: clamp(2rem, 6vw, 5rem); padding: 5rem 0; }
+.eyebrow, .section-label { color: var(--purple-bright); font-size: .76rem; line-height: 1.2; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: 1.5rem; font-family: Georgia, "Times New Roman", serif; font-size: clamp(3.4rem, 7vw, 6.7rem); line-height: .92; letter-spacing: -.055em; font-weight: 500; }
+h1 span { color: var(--purple-bright); }
+.lede { max-width: 42rem; color: var(--muted); font-size: clamp(1.05rem, 1.8vw, 1.25rem); }
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; margin: 2rem 0 1.25rem; }
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: .65rem 1.05rem; border: 1px solid var(--line); border-radius: .55rem; text-decoration: none; font-weight: 750; }
+.button-primary { background: var(--purple); color: #100a18; border-color: var(--purple); }
+.button-primary:hover, .button-primary:focus-visible { background: var(--purple-bright); }
+.button-secondary { background: rgba(255,255,255,.035); }
+.button-secondary:hover, .button-secondary:focus-visible { border-color: var(--purple); }
+.status { display: flex; align-items: center; gap: .55rem; color: var(--muted); font-size: .9rem; }
+.status span { width: .55rem; height: .55rem; border-radius: 50%; background: var(--mint); box-shadow: 0 0 1rem rgba(120,239,192,.6); }
+.hero-art { margin: 0; position: relative; }
+.hero-art::before { content: ""; position: absolute; inset: -8%; background: radial-gradient(circle, rgba(153, 89, 247, .25), transparent 62%); filter: blur(1.5rem); z-index: -1; }
+.hero-art img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: .8rem; box-shadow: 0 2rem 5rem rgba(0,0,0,.45); }
+
+.purpose, .field-section, .privacy, .boundary, .cta { padding: clamp(4rem, 9vw, 8rem) 0; border-top: 1px solid var(--line); }
+.purpose { display: grid; grid-template-columns: .7fr 2fr; gap: 2rem; }
+.purpose h2, .section-intro h2, .privacy h2, .boundary h2, .cta h2 { margin-bottom: 1.2rem; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.25rem, 4.5vw, 4.25rem); line-height: 1.04; letter-spacing: -.04em; font-weight: 500; }
+.purpose > p:last-child, .boundary > p:last-child, .cta > p { max-width: 48rem; color: var(--muted); font-size: 1.12rem; }
+.section-intro { max-width: 48rem; margin-bottom: 3rem; }
+.section-intro > p:last-child { color: var(--muted); }
+.field-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.field-grid article { min-height: 13rem; padding: 1.5rem; background: var(--surface); }
+.field-grid article:nth-child(even) { background: var(--surface-2); }
+.field-grid span { color: var(--purple); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; }
+.field-grid h3 { margin: 2rem 0 .4rem; font-size: 1.12rem; }
+.field-grid p { color: var(--muted); font-size: .94rem; line-height: 1.55; }
+.privacy { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+.privacy ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .75rem; }
+.privacy li { padding: 1rem 1.2rem; background: var(--surface); border-left: 2px solid var(--mint); color: var(--muted); }
+.boundary { max-width: 52rem; }
+.cta { text-align: center; }
+.cta > p { margin-inline: auto; }
+.cta .actions { justify-content: center; }
+
+footer { display: flex; justify-content: space-between; gap: 2rem; padding: 2rem 0 3rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .86rem; }
+footer a { color: var(--text); }
+
+@media (max-width: 860px) {
+  nav a:not(:last-child) { display: none; }
+  .hero { min-height: auto; grid-template-columns: 1fr; padding: 4rem 0; }
+  .hero-art { order: -1; }
+  h1 { font-size: clamp(3rem, 15vw, 5.2rem); }
+  .purpose, .privacy { grid-template-columns: 1fr; }
+  .field-grid { grid-template-columns: repeat(2, 1fr); }
+  footer { flex-direction: column; gap: .5rem; }
+}
+
+@media (max-width: 520px) {
+  .site-header { min-height: 4.4rem; }
+  .brand { font-size: .92rem; }
+  .hero { padding-top: 2rem; }
+  .field-grid { grid-template-columns: 1fr; }
+  .field-grid article { min-height: 0; }
+  .button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

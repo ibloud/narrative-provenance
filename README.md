@@ -2,6 +2,8 @@
 
 Narrative Provenance is a privacy-first Obsidian plugin for recording what a note is, where it came from, who created it, and what rights or permissions apply.
 
+**[Visit the project website](https://ibloud.github.io/narrative-provenance/)** · [View the current release](https://github.com/ibloud/narrative-provenance/releases/tag/0.1.1) · [Report an issue](https://github.com/ibloud/narrative-provenance/issues)
+
 It helps writers, researchers, archivists, journalists, and collaborative worldbuilders distinguish:
 
 - verified information from interpretation and fiction;
@@ -81,6 +83,10 @@ Narrative Provenance records a user's assessment. It does not independently auth
 Bug reports and focused feature proposals are welcome through GitHub Issues. Please do not include private vault contents, confidential correspondence, personal health information, or unredacted evidence in a public issue.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+
+## Acknowledgments
+
+Narrative Provenance was created by Dominique Devereaux with development assistance from OpenAI Codex. This acknowledgment describes tool-assisted development and does not imply authorship, ownership, affiliation, or endorsement by OpenAI.
 
 ## License
 

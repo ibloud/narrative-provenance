@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Narrative Provenance — Privacy-first provenance for Obsidian</title>
+  <meta name="description" content="Record authorship, sources, rights, consent, and narrative status in ordinary Obsidian properties—without sending vault data anywhere.">
+  <meta name="theme-color" content="#100d18">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Narrative Provenance">
+  <meta property="og:description" content="Privacy-first provenance records for Obsidian notes.">
+  <meta property="og:url" content="https://ibloud.github.io/narrative-provenance/">
+  <meta property="og:image" content="https://ibloud.github.io/narrative-provenance/assets/narrative-provenance-social.jpg">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Narrative Provenance">
+  <meta name="twitter:description" content="Privacy-first provenance records for Obsidian notes.">
+  <meta name="twitter:image" content="https://ibloud.github.io/narrative-provenance/assets/narrative-provenance-social.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Narrative Provenance home">
+      <span class="brand-mark" aria-hidden="true">NP</span>
+      <span>Narrative Provenance</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#privacy">Privacy</a>
+      <a href="https://github.com/ibloud/narrative-provenance">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">Obsidian community plugin · v0.1.1</p>
+        <h1>Keep the story.<br><span>Preserve the evidence.</span></h1>
+        <p class="lede">Record what a note is, where it came from, who created it, and what rights or permissions apply—in readable properties that remain inside your vault.</p>
+        <div class="actions">
+          <a class="button button-primary" href="https://github.com/ibloud/narrative-provenance/releases/tag/0.1.1">View release</a>
+          <a class="button button-secondary" href="https://github.com/ibloud/narrative-provenance#development-installation">Test the plugin</a>
+        </div>
+        <p class="status"><span aria-hidden="true"></span> Submitted for Obsidian review</p>
+      </div>
+      <figure class="hero-art">
+        <img src="assets/narrative-provenance-social.jpg" width="1280" height="640" alt="Narrative Provenance artwork showing documents, sources, rights, consent, and verification connected through an amethyst evidence network.">
+      </figure>
+    </section>
+
+    <section class="purpose" aria-labelledby="purpose-heading">
+      <p class="section-label">Why it exists</p>
+      <h2 id="purpose-heading">Interpretation should not quietly become evidence.</h2>
+      <p>Narrative Provenance gives writers, researchers, archivists, journalists, and collaborative worldbuilders a consistent way to distinguish verified information from interpretation and fiction—while keeping authorship, copyright, consent, and affiliation separate.</p>
+    </section>
+
+    <section class="field-section" id="how-it-works" aria-labelledby="fields-heading">
+      <div class="section-intro">
+        <p class="section-label">Readable by people and tools</p>
+        <h2 id="fields-heading">Seven properties. One clearer record.</h2>
+        <p>The guided editor writes ordinary YAML frontmatter, so provenance stays portable even without the plugin.</p>
+      </div>
+      <div class="field-grid">
+        <article><span>01</span><h3>Status</h3><p>Verified, interpretation, fictional, mixed, or unreviewed.</p></article>
+        <article><span>02</span><h3>Authors</h3><p>The people or organizations responsible for the work.</p></article>
+        <article><span>03</span><h3>Created</h3><p>The date associated with the record or source.</p></article>
+        <article><span>04</span><h3>Sources</h3><p>Links or references that support the record.</p></article>
+        <article><span>05</span><h3>Rights</h3><p>Original, licensed, public domain, permission status, or fair-use claim.</p></article>
+        <article><span>06</span><h3>Consent</h3><p>Tracked separately from ownership and licensing.</p></article>
+        <article><span>07</span><h3>Affiliation</h3><p>Independent, official, or unclear—without implying endorsement.</p></article>
+      </div>
+    </section>
+
+    <section class="privacy" id="privacy" aria-labelledby="privacy-heading">
+      <div>
+        <p class="section-label">Privacy first</p>
+        <h2 id="privacy-heading">Your vault stays your vault.</h2>
+      </div>
+      <ul>
+        <li>No telemetry</li>
+        <li>No accounts</li>
+        <li>No advertising or payments</li>
+        <li>No network requests</li>
+        <li>No external file access</li>
+      </ul>
+    </section>
+
+    <section class="boundary" aria-labelledby="boundary-heading">
+      <p class="section-label">Important boundary</p>
+      <h2 id="boundary-heading">A record supports review. It does not replace it.</h2>
+      <p>The plugin records a user’s assessment. It does not authenticate sources, secure permission, determine copyright ownership, or provide legal advice. Users remain responsible for review and publication decisions.</p>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-heading">
+      <p class="section-label">Open source · MIT licensed</p>
+      <h2 id="cta-heading">Help test Narrative Provenance.</h2>
+      <p>Try the current release in a separate test vault, report focused issues, and help make provenance easier to preserve.</p>
+      <div class="actions">
+        <a class="button button-primary" href="https://github.com/ibloud/narrative-provenance">Explore on GitHub</a>
+        <a class="button button-secondary" href="https://github.com/ibloud/narrative-provenance/issues">Report an issue</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Created by Dominique Devereaux with development assistance from <a href="https://chatgpt.com/codex">OpenAI Codex</a>.</p>
+    <p><a href="https://github.com/ibloud/narrative-provenance/blob/main/LICENSE">MIT License</a> · <a href="https://github.com/ibloud/narrative-provenance/blob/main/SECURITY.md">Security</a></p>
+  </footer>
+</body>
+</html>
