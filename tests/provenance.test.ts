@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { auditRecord, emptyRecord, recordFromFrontmatter } from "../src/provenance";
+import { auditRecord, emptyRecord, recordFromFrontmatter, writeRecordToFrontmatter } from "../src/provenance";
 
 describe("provenance records", () => {
   it("creates a privacy-safe empty local record", () => {
@@ -11,6 +11,24 @@ describe("provenance records", () => {
     const record = recordFromFrontmatter({ provenance: { authors: "A, B", sources: ["one", "two"] } });
     expect(record.authors).toEqual(["A", "B"]);
     expect(record.sources).toEqual(["one", "two"]);
+  });
+
+  it("reads flat Obsidian properties before legacy nested data", () => {
+    const record = recordFromFrontmatter({
+      "provenance-status": "fictional",
+      "provenance-authors": ["Dominique"],
+      provenance: { status: "verified" }
+    });
+    expect(record.status).toBe("fictional");
+    expect(record.authors).toEqual(["Dominique"]);
+  });
+
+  it("writes readable properties and removes the legacy object", () => {
+    const frontmatter: Record<string, unknown> = { provenance: { status: "verified" } };
+    writeRecordToFrontmatter(frontmatter, { ...emptyRecord("Dominique"), status: "fictional" });
+    expect(frontmatter["provenance-status"]).toBe("fictional");
+    expect(frontmatter["provenance-authors"]).toEqual(["Dominique"]);
+    expect(frontmatter.provenance).toBeUndefined();
   });
 
   it("requires sources for verified claims", () => {
