@@ -10,28 +10,47 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - run: npm ci
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+      - name: Attest release assets
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            main.js
+            manifest.json
+            styles.css
+
       - name: Verify manifest version
         run: node -e "if(require('./manifest.json').version!=='0.1.2')process.exit(1)"
-      - name: Create beta release
+
+      - name: Create beta release if missing
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh release create 0.1.2 main.js manifest.json styles.css
-          --target "$GITHUB_SHA"
-          --title "0.1.2"
-          --notes "Community-review corrections: safe view lifecycle, current API compatibility, awaited callbacks, safer frontmatter handling, and searchable settings."
-          --prerelease
+        run: |
+          if gh release view 0.1.2 >/dev/null 2>&1; then
+            echo "Release 0.1.2 already exists; leaving its assets unchanged."
+          else
+            gh release create 0.1.2 main.js manifest.json styles.css \
+              --target "$GITHUB_SHA" \
+              --title "0.1.2" \
+              --notes "Community-review corrections: safe view lifecycle, current API compatibility, awaited callbacks, safer frontmatter handling, and searchable settings." \
+              --prerelease
+          fi
