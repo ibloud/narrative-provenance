@@ -2,7 +2,9 @@
 
 Narrative Provenance is a privacy-first Obsidian plugin for recording what a note is, where it came from, who created it, and what rights or permissions apply.
 
-**[Visit the project website](https://ibloud.github.io/narrative-provenance/)** · [View the current release](https://github.com/ibloud/narrative-provenance/releases/tag/0.1.1) · [Report an issue](https://github.com/ibloud/narrative-provenance/issues)
+It is also the first software implementation of the broader [Creative Provenance Workflow](WORKFLOW.md): a platform-neutral method for preserving dates and authorship, separating evidence from interpretation, connecting sources to a wider project ecosystem, and labeling uncertain or third-party claims.
+
+**[Visit the project website](https://ibloud.github.io/narrative-provenance/)** · [Read the workflow](WORKFLOW.md) · [Make the presentation your own](presentation/README.md) · [Join the collective](COLLECTIVE.md) · [View the current release](https://github.com/ibloud/narrative-provenance/releases/tag/0.1.2) · [Report an issue](https://github.com/ibloud/narrative-provenance/issues)
 
 It helps writers, researchers, archivists, journalists, and collaborative worldbuilders distinguish:
 
@@ -81,6 +83,8 @@ Narrative Provenance records a user's assessment. It does not independently auth
 ## Contributing and support
 
 Bug reports and focused feature proposals are welcome through GitHub Issues. Please do not include private vault contents, confidential correspondence, personal health information, or unredacted evidence in a public issue.
+
+People who do not write code can also test a template, improve a label, contribute a safely shareable example, or report an accessibility and interruption-recovery problem. See [A Beginning for the Collective](COLLECTIVE.md).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
