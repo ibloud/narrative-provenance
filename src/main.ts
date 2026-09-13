@@ -1,10 +1,12 @@
-import { Notice, Plugin, PluginSettingTab, TFile, WorkspaceLeaf, type SettingDefinitionItem } from "obsidian";
+import { Notice, normalizePath, Plugin, PluginSettingTab, TFile, WorkspaceLeaf, type SettingDefinitionItem } from "obsidian";
+import { CollaborationProjectModal } from "./collaboration-modal";
+import { auditForSharing, buildCollaborationProject, type ProjectFile } from "./collaboration";
 import { ProvenanceModal } from "./modal";
 import { auditRecord, recordFromFrontmatter, writeRecordToFrontmatter } from "./provenance";
 import type { AuditResult, ProvenanceRecord, ProvenanceSettings } from "./types";
 import { PROVENANCE_VIEW, ProvenanceView } from "./view";
 
-const DEFAULT_SETTINGS: ProvenanceSettings = { defaultAuthor: "", warnBeforeOverwrite: true };
+const DEFAULT_SETTINGS: ProvenanceSettings = { defaultAuthor: "", warnBeforeOverwrite: true, collaborationRoot: "Collaborations" };
 
 export default class NarrativeProvenancePlugin extends Plugin {
   settings: ProvenanceSettings = DEFAULT_SETTINGS;
@@ -16,6 +18,8 @@ export default class NarrativeProvenancePlugin extends Plugin {
     this.addCommand({ id: "edit-current-note-provenance", name: "Edit current note provenance", callback: () => this.openEditor() });
     this.addCommand({ id: "audit-current-note-provenance", name: "Audit current note provenance", callback: () => this.showAudit() });
     this.addCommand({ id: "open-provenance-sidebar", name: "Open provenance sidebar", callback: () => { void this.activateView(); } });
+    this.addCommand({ id: "start-guarded-collaboration-project", name: "Start guarded collaboration project", callback: () => this.openCollaborationProject() });
+    this.addCommand({ id: "audit-current-note-for-sharing", name: "Audit current note for sharing", callback: () => { void this.showShareAudit(); } });
     this.addSettingTab(new ProvenanceSettingTab(this.app, this));
     this.app.workspace.onLayoutReady(() => {
       this.registerEvent(this.app.workspace.on("active-leaf-change", () => this.refreshViews()));
@@ -47,6 +51,37 @@ export default class NarrativeProvenancePlugin extends Plugin {
     const result = this.audit(this.readRecord(file));
     const detail = result.missing.length ? ` Missing: ${result.missing.join(", ")}.` : " All required fields are recorded.";
     new Notice(`Provenance is ${result.score}% complete.${detail}`, 8000);
+  }
+
+  openCollaborationProject(): void {
+    new CollaborationProjectModal(this.app, this.settings.collaborationRoot, this.settings.defaultAuthor, async (input) => {
+      const files = buildCollaborationProject(input, new Date().toISOString().slice(0, 10));
+      for (const file of files) await this.createProjectFile(file);
+      new Notice(`Guarded collaboration project created in ${input.rootFolder}.`, 7000);
+    }).open();
+  }
+
+  async showShareAudit(): Promise<void> {
+    const file = this.app.workspace.getActiveFile();
+    if (!file || file.extension !== "md") { new Notice("Open a Markdown note first."); return; }
+    const content = await this.app.vault.cachedRead(file);
+    const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
+    const result = auditForSharing(file.path, content, this.readRecord(file), frontmatter);
+    const details = [...result.blockers.map((item) => `BLOCK: ${item}`), ...result.cautions.map((item) => `CHECK: ${item}`)];
+    const message = result.allowed ? "Share audit passed. Manual review is still required." : "Share audit blocked.";
+    new Notice(`${message} Zone: ${result.zone}.${details.length ? ` ${details.join(" ")}` : ""}`, 12000);
+  }
+
+  private async createProjectFile(file: ProjectFile): Promise<void> {
+    const path = normalizePath(file.path);
+    const parts = path.split("/").slice(0, -1);
+    let folder = "";
+    for (const part of parts) {
+      folder = folder ? `${folder}/${part}` : part;
+      if (!this.app.vault.getAbstractFileByPath(folder)) await this.app.vault.createFolder(folder);
+    }
+    if (this.app.vault.getAbstractFileByPath(path)) throw new Error(`File already exists: ${path}`);
+    await this.app.vault.create(path, file.content);
   }
 
   async activateView(): Promise<void> {
@@ -92,6 +127,11 @@ class ProvenanceSettingTab extends PluginSettingTab {
         desc: "Reserved for the guided import workflow in a future release.",
         control: { type: "toggle", key: "warnBeforeOverwrite", defaultValue: true },
       },
+      {
+        name: "Collaboration root folder",
+        desc: "Vault-relative folder where guarded collaboration projects are created.",
+        control: { type: "text", key: "collaborationRoot", defaultValue: "Collaborations" },
+      },
     ];
   }
 
@@ -100,6 +140,8 @@ class ProvenanceSettingTab extends PluginSettingTab {
       this.plugin.settings.defaultAuthor = value.trim();
     } else if (key === "warnBeforeOverwrite" && typeof value === "boolean") {
       this.plugin.settings.warnBeforeOverwrite = value;
+    } else if (key === "collaborationRoot" && typeof value === "string" && value.trim()) {
+      this.plugin.settings.collaborationRoot = value.trim();
     } else {
       return;
     }
