@@ -21,6 +21,8 @@ All information remains in ordinary YAML frontmatter inside the user's vault. Th
 - Cautions for declined consent, unclear affiliation, and fair-use claims
 - Human-readable, portable metadata
 - Desktop and mobile support
+- Guarded collaboration-project setup with separate control, private, working, review, public, and archive zones
+- Local share audit that fails closed on unresolved rights, consent, provenance, release approval, or possible credentials
 
 ## Metadata format
 
@@ -60,6 +62,21 @@ Open a Markdown note, then choose one of these commands from the command palette
 - **Edit current note provenance**
 - **Audit current note provenance**
 - **Open provenance sidebar**
+- **Start guarded collaboration project**
+- **Audit current note for sharing**
+
+### Guarded collaboration projects
+
+The project wizard creates a local-first folder system beneath `Collaborations/` by default:
+
+- `00-Control` — charter, ownership map, collaborator register, and release gates
+- `10-Private` — raw evidence and protected records; this folder is not encryption
+- `20-Working` — active drafts that are not approved for publication
+- `30-Share-Review` — redacted derivatives awaiting review
+- `40-Public` — approved public derivatives only
+- `90-Archive` — withdrawn, superseded, and closed records
+
+The share audit reviews the active note's zone, release status, provenance, rights, consent, affiliation, and several high-risk content markers. Passing the audit is not automatic publication or legal clearance. Narrative Provenance does not upload or synchronize files and cannot prevent another plugin, sync provider, operating system, or person with device access from copying vault contents.
 
 The ribbon's file-check icon opens the sidebar.
 

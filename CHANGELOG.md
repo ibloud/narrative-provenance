@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add guarded collaboration-project creation with control, private, working, review, public, and archive zones.
+- Add local share audits that fail closed on unresolved provenance, rights, consent, release status, and possible secrets.
+- Add founder-rights, collaborator, rights-map, and release-gate templates without adding accounts, telemetry, network access, or encryption claims.
+
 ## 0.1.2
 
 - Corrected all blocking findings from the Obsidian community review scanner.

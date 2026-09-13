@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { auditRecord, emptyRecord, recordFromFrontmatter, writeRecordToFrontmatter } from "../src/provenance";
+import { auditForSharing, buildCollaborationProject, classifyStorageZone, projectSlug } from "../src/collaboration";
 
 describe("provenance records", () => {
   it("creates a privacy-safe empty local record", () => {
@@ -39,5 +40,39 @@ describe("provenance records", () => {
   it("flags declined consent", () => {
     const record = { ...emptyRecord(), consent: "declined" as const };
     expect(auditRecord(record).cautions[0]).toContain("declined");
+  });
+});
+
+describe("guarded collaboration projects", () => {
+  it("creates portable project paths and control records", () => {
+    const files = buildCollaborationProject({ name: "Veiled Dominion", founder: "Dominique", rootFolder: "Collaborations", purpose: "Build without founder erasure." }, "2026-09-13");
+    expect(projectSlug("Veiled Dominion!")).toBe("veiled-dominion");
+    expect(files.some((file) => file.path.endsWith("00-Control/RIGHTS-MAP.md"))).toBe(true);
+    expect(files.some((file) => file.path.endsWith("40-Public/README.md"))).toBe(true);
+  });
+
+  it("classifies guarded storage zones", () => {
+    expect(classifyStorageZone("Collaborations/project/10-Private/evidence.md")).toBe("private");
+    expect(classifyStorageZone("Collaborations/project/40-Public/statement.md")).toBe("public");
+  });
+
+  it("blocks private notes and unresolved permission", () => {
+    const record = { ...emptyRecord("Dominique"), status: "interpretation" as const, rights: "permission-requested" as const, consent: "requested" as const };
+    const result = auditForSharing("Collaborations/project/10-Private/note.md", "private correspondence", record, { "release-status": "blocked" });
+    expect(result.allowed).toBe(false);
+    expect(result.blockers.join(" ")).toContain("private-evidence");
+  });
+
+  it("passes only an approved public derivative with resolved provenance", () => {
+    const record = { ...emptyRecord("Dominique"), status: "interpretation" as const, rights: "original" as const, consent: "not-applicable" as const, affiliation: "independent" as const };
+    const result = auditForSharing("Collaborations/project/40-Public/statement.md", "Public statement", record, { "release-status": "approved" });
+    expect(result.allowed).toBe(true);
+  });
+
+  it("flags possible secrets and protected cloud links", () => {
+    const record = { ...emptyRecord("Dominique"), status: "verified" as const, rights: "original" as const, consent: "granted" as const };
+    const result = auditForSharing("Collaborations/project/40-Public/note.md", "api_key=do-not-publish https://drive.google.com/example", record, { "release-status": "approved" });
+    expect(result.blockers.join(" ")).toContain("credential");
+    expect(result.cautions.join(" ")).toContain("Cloud-storage");
   });
 });

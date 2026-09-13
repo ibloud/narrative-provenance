@@ -23,6 +23,7 @@ export interface ProvenanceRecord {
 export interface ProvenanceSettings {
   defaultAuthor: string;
   warnBeforeOverwrite: boolean;
+  collaborationRoot: string;
 }
 
 export interface AuditResult {
